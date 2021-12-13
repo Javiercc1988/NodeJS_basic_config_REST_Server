@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const { dbConnection } = require("../db/config");
 
 class Server {
   // Cuando llamemos al constructor al final vamos a llamar las rutas.
@@ -8,11 +9,18 @@ class Server {
     this.port = process.env.PORT;
     this.usersPath = "/api/users";
 
+    // Conectar a base de datos
+    this.connectDB();
+
     // Middlewares
     this.middlewares();
 
     // Rutas de mi aplicación
     this.routes();
+  }
+
+  async connectDB() {
+    await dbConnection();
   }
 
   middlewares() {
@@ -23,8 +31,7 @@ class Server {
     this.app.use(cors());
 
     // Lectura del body recibido
-    this.app.use (express.json())
-
+    this.app.use(express.json());
   }
 
   // Creamos los métodos

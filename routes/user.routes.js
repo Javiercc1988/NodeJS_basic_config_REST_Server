@@ -13,7 +13,7 @@ router.get("/", usersGet);
 
 router.post("/", usersPost);
 
-router.put("/:id", usersPut);
+router.put("/", usersPut);
 
 router.patch("/", usersPatch);
 
