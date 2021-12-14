@@ -1,5 +1,9 @@
 const mongoose = require("mongoose");
 
+
+// Realizaremos la petición de conexión de forma asincrona 
+// controlada por si ocurriese cualquier tipo de error
+
 const dbConnection = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_CNN, {
