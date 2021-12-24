@@ -38,4 +38,15 @@ const UserSchema = Schema({
   },
 });
 
+//************************************************//
+// Vamos a personalizar el metodo toJSON de mongoose. Nos va a permitir decidir
+// que es lo que se muestra de nuestro modelo, de esta forma evitaremos que nos muestre
+// tanto la versión (__v) como la contraseña.
+
+UserSchema.methods.toJSON = function () {
+  const { __v, password, ...user } = this.toObject();
+  // Esto nos va a generar nuestra instancia pero con nuestros valores respectivos
+  return user;
+};
+
 module.exports = model("User", UserSchema);

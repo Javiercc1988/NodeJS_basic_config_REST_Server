@@ -9,11 +9,31 @@ const {
 } = require("../controllers/users.controller");
 
 const { validarCampos } = require("../middlewares/validar-campos");
+const {
+  esRoleValido,
+  emailExiste,
+  existeUsuarioPorId,
+} = require("../helpers/db-validators");
 const Role = require("../models/role");
 const router = Router();
 
+// RUTA PARA PETICIÓN GET
 router.get("/", usersGet);
 
+// RUTA PARA PETICIÓN PUT
+router.put(
+  "/:id",
+  [
+    check("id", "No es un ID válido.").isMongoId(),
+    check("id").custom(existeUsuarioPorId),
+    check("rol").custom(esRoleValido),
+
+    validarCampos,
+  ],
+  usersPut
+);
+
+// RUTA PARA PETICIÓN POST
 router.post(
   "/",
   [
@@ -23,23 +43,27 @@ router.post(
       "El password es obligatorio y debe tener más de 6 caracteres"
     ).isLength({ min: 6 }),
     check("correo", "El correo no es válido").isEmail(),
-    // check("rol", "No es un rol válido").isIn(['ADMIN_ROLE','USER_ROLE']),
-    check("rol").custom(async (rol = "") => {
-      const existeRol = await Role.findOne({ rol });
-      if (!existeRol) {
-        throw new Error(`El rol ${rol} no está registrado en la bbdd.`);
-      }
-    }),
+    check("correo", "La cuenta de correo ya existe.").custom(emailExiste),
+    check("rol").custom(esRoleValido),
+
     validarCampos,
     // ValidarCampos es nuestro propio middleware que se encarga de devolver el control de errores si existen.
   ],
   usersPost
 );
 
-router.put("/:id", usersPut);
-
+// RUTA PARA PETICIÓN PATCH
 router.patch("/", usersPatch);
 
-router.delete("/", usersDelete);
+// RUTA PARA PETICIÓN DELETE
+router.delete(
+  "/:id",
+  [
+    check("id", "No es un ID válido.").isMongoId(),
+    check("id").custom(existeUsuarioPorId),
+    validarCampos,
+  ],
+  usersDelete
+);
 
 module.exports = router;
