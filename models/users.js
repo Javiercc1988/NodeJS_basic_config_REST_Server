@@ -44,7 +44,8 @@ const UserSchema = Schema({
 // tanto la versión (__v) como la contraseña.
 
 UserSchema.methods.toJSON = function () {
-  const { __v, password, ...user } = this.toObject();
+  const { __v, password,_id, ...user } = this.toObject();
+  user.uid = _id
   // Esto nos va a generar nuestra instancia pero con nuestros valores respectivos
   return user;
 };

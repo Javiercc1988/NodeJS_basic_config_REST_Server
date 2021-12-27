@@ -11,9 +11,7 @@ const usersGet = async (req, res = response) => {
 
   const [total, usuarios] = await Promise.all([
     User.countDocuments(query),
-    User.find(query)
-      .skip(Number(desde))
-      .limit(Number(limite)),
+    User.find(query).skip(Number(desde)).limit(Number(limite)),
   ]);
   // Hacemos una desestructuración de array y utilizamos Promise.all para realizar las query simultaneamente recortando mucho el tiempo de la consulta.
 

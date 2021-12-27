@@ -8,14 +8,23 @@ const {
   usersDelete,
 } = require("../controllers/users.controller");
 
-const { validarCampos } = require("../middlewares/validar-campos");
+const {
+  validarCampos,
+  validarJWT,
+  esAdminRole,
+  tieneRole,
+} = require("../middlewares");
+
 const {
   esRoleValido,
   emailExiste,
   existeUsuarioPorId,
 } = require("../helpers/db-validators");
+
 const Role = require("../models/role");
 const router = Router();
+
+/*******************************************************************/
 
 // RUTA PARA PETICIÓN GET
 router.get("/", usersGet);
@@ -59,6 +68,9 @@ router.patch("/", usersPatch);
 router.delete(
   "/:id",
   [
+    validarJWT,
+    // esAdminRole, // Este middleware forzaria a solo usuarios ADMIN, con tieneRole le damos la opción de pasar una lista de argumentos para varios roles.
+    tieneRole("ADMIN_ROLE", "VENTAS_ROLE"),
     check("id", "No es un ID válido.").isMongoId(),
     check("id").custom(existeUsuarioPorId),
     validarCampos,
