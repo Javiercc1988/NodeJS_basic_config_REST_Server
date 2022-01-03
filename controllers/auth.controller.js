@@ -1,7 +1,7 @@
 const { response, json } = require("express");
 const bcryptjs = require("bcryptjs");
 
-const Usuario = require("../models/users");
+const Usuario = require("../models/user");
 const { generarJWT } = require("../helpers/generar-jwt");
 const { googleVerify } = require("../helpers/google-verify");
 const { DefaultTransporter } = require("google-auth-library");
@@ -48,6 +48,8 @@ const login = async (req, res = response) => {
   }
 };
 
+/*****************************************/
+
 const googleSignIn = async (req, res) => {
   const { id_token } = req.body;
 
@@ -64,7 +66,7 @@ const googleSignIn = async (req, res) => {
         password: "..:P",
         img,
         google: true,
-        rol: "USER_ROLE"
+        rol: "USER_ROLE",
       };
 
       usuario = new Usuario(data);
@@ -83,7 +85,7 @@ const googleSignIn = async (req, res) => {
 
     res.json({
       usuario,
-      token
+      token,
     });
   } catch (error) {
     res.status(400).json({

@@ -1,8 +1,9 @@
 // Crearemos nuestras validaciones personalizadas.
+const { Categoria, Users, Role, Producto } = require("../models");
 
-const Role = require("../models/role");
-const User = require("../models/users");
+/****************************************************************** */
 
+/* VALIDACIONES DE USUARIO */
 const esRoleValido = async (rol = "") => {
   const existeRol = await Role.findOne({ rol });
   if (!existeRol) {
@@ -11,21 +12,58 @@ const esRoleValido = async (rol = "") => {
 };
 
 const emailExiste = async (correo = "") => {
-  const existeEmail = await User.findOne({ correo });
+  const existeEmail = await Users.findOne({ correo });
   if (existeEmail) {
     throw new Error(`El email ${correo} ya está registrado.`);
   }
 };
 
 const existeUsuarioPorId = async (id) => {
-  const existeUsuario = await User.findById(id);
-  if (!existeUsuarioPorId) {
+  const existeUsuario = await Users.findById(id);
+  if (!existeUsuario) {
     throw new Error(`El id: ${id} no existe.`);
+  }
+};
+
+/****************************************************************** */
+/* VALIDACIONES DE CATEGORIAS */
+const categoriaExiste = async (nombre = "") => {
+  const existeCategoria = await Categoria.findOne({ nombre });
+  if (existeCategoria) {
+    throw new Error(`La categoria: ${nombre}, ya existe.`);
+  }
+};
+
+const existeCategoriaPorId = async (id) => {
+  const existeCategoria = await Categoria.findById(id);
+  if (!existeCategoria) {
+    throw new Error(`El id: ${id} no existe.`);
+  }
+};
+
+
+/****************************************************************** */
+// VALIDACIONES DE PRODUCTOS 
+const productoExiste = async (nombre = "") => {
+  const existeProducto = await Producto.findOne({ nombre });
+  if (existeProducto) {
+    throw new Error(`El producto: ${nombre}, ya existe.`);
+  }
+};
+
+const existeProductoPorId = async (id) => {
+  const existeProducto = await Producto.findById(id);
+  if (!existeProducto) {
+    throw new Error(`El id de producto: ${id} no existe.`);
   }
 };
 
 module.exports = {
   esRoleValido,
   emailExiste,
-  existeUsuarioPorId
+  existeUsuarioPorId,
+  categoriaExiste,
+  existeCategoriaPorId,
+  productoExiste,
+  existeProductoPorId,
 };

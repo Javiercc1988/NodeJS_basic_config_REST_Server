@@ -1,7 +1,7 @@
 const { response } = require("express");
 const bcryptjs = require("bcryptjs");
 
-const User = require("../models/users");
+const User = require("../models/user");
 
 // USER GET
 const usersGet = async (req, res = response) => {
@@ -31,7 +31,6 @@ const usersPost = async (req, res) => {
   await user.save();
 
   res.json({
-    msg: "post API - Controller",
     user,
   });
 };
