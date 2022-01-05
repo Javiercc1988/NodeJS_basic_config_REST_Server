@@ -1,4 +1,5 @@
 // Crearemos nuestras validaciones personalizadas.
+const res = require("express/lib/response");
 const { Categoria, Users, Role, Producto } = require("../models");
 
 /****************************************************************** */
@@ -58,6 +59,19 @@ const existeProductoPorId = async (id) => {
   }
 };
 
+/****************************************************************** */
+// VALIDAR COLECCIONES PERMITIDAS
+
+const coleccionesPermitidas = (coleccion,colecciones = []) => {
+  const incluida = colecciones.includes(coleccion)
+
+  if(!incluida) {
+    throw new Error(`La coleccion ${coleccion}, no existe. Use: ${colecciones}`)
+  }
+
+  return true
+}
+
 module.exports = {
   esRoleValido,
   emailExiste,
@@ -66,4 +80,5 @@ module.exports = {
   existeCategoriaPorId,
   productoExiste,
   existeProductoPorId,
+  coleccionesPermitidas,
 };
