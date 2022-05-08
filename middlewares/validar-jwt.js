@@ -2,8 +2,8 @@ const jwt = require("jsonwebtoken");
 const Usuario = require("../models/user");
 
 const validarJWT = async (req, res = response, next) => {
-  const token = req.header("x-token");
-  // Leemos el token del header, el nombre que le asignemos es como tendrá que enviarlo el front puede ser x-token, authentication o como queramos.
+  const token = req.header("xToken");
+  // Leemos el token del header, el nombre que le asignemos es como tendrá que enviarlo el front puede ser xToken, authentication o como queramos.
 
   if (!token) {
     return res.status(401).json({
